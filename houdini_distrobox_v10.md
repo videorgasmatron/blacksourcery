@@ -102,36 +102,6 @@ distrobox enter houdini
 
 Initializes the container environment, maps host user permissions (UID/GID), and populates internal file paths.
 
-Note: Must be executed before modifying permissions, setting up Vulkan/license configs, or copying installation files. Otherwise, paths and user mappings will be invalid.
-
-3. Exit distrobox and from host. Ensure total ownership of the structure for the real user
-
-sudo chown -R $USER:$USER /mnt/virtuality/houdini
-
-4. Apply selective POSIX permissions (Navigable folders and non-executable files)
-
-find /mnt/virtuality/houdini -type d -exec chmod 755 {} +
-find /mnt/virtuality/houdini -type f -exec chmod 644 {} +
-
-
-CONSOLE VERIFICATION:
-
-ls -ld /mnt/virtuality/houdini/home
-ls -ld /mnt/virtuality/houdini/workspace
-
-Both must return exactly: drwxr-xr-x and the ownership of your host user.
-
-distrobox list
-
-Must list the container 'houdini' with status created or active.
-
-#### ARCHITECTURE NOTES (THEORY VS. REAL PRACTICE):
-
-Why does the strict order of permissions go here? 
-When creating the container, Rootless Podman creates the hidden skeleton files of the Debian system (such as the initial .bashrc) inside the persistent '/home' folder. Executing 'chown' and 'find' at this exact moment guarantees that everything created internally falls under your absolute control and free of write blocks.
-
-The myth of 'chmod 777': Forcing universal permissions opens security breaches and destabilizes persistence. The combined use of 'chown' with '755' and '644' keeps Rootless Podman policies intact and the environment clean.
-
 ---
 
 ## STEP 4: THE GRAPHICS LIBRARIES SHIELD (INSIDE THE DEBIAN 12 CONTAINER)
@@ -141,11 +111,7 @@ Massively and cumulatively install the full stack of graphics dependencies, X11,
 
 COMMANDS TO EXECUTE INSIDE THE CONTAINER:
 
-1. Enter your created container with alias
-
-houdini
-
-2. Update the Debian internal repository list
+1. Update the Debian internal repository list
 
 sudo apt update
 
