@@ -104,7 +104,7 @@ Initializes the container environment, maps host user permissions (UID/GID), and
 
 Note: Must be executed before modifying permissions, setting up Vulkan/license configs, or copying installation files. Otherwise, paths and user mappings will be invalid.
 
-3. Ensure total ownership of the structure for the real user
+3. Exit distrobox and from host. Ensure total ownership of the structure for the real user
 
 sudo chown -R $USER:$USER /mnt/virtuality/houdini
 
